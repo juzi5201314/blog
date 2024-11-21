@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on soeur&#39;s blog</title>
+    <link>https://example.org/posts/</link>
+    <description>Recent content in Posts on soeur&#39;s blog</description>
+    <generator>Hugo</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Thu, 21 Nov 2024 18:46:31 +0800</lastBuildDate>
+    <atom:link href="https://example.org/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>将btrfs迁移到子卷把引导弄坏这件事</title>
+      <link>https://example.org/posts/migrate-btrfs-subvol/</link>
+      <pubDate>Thu, 21 Nov 2024 18:46:31 +0800</pubDate>
+      <guid>https://example.org/posts/migrate-btrfs-subvol/</guid>
+      <description>&lt;p&gt;折腾完了桌面坏境, 开始设置备份, 一开始想用timeshift, 但是不知道为啥它的gui打开就闪退, 只好使用snapper了.&lt;/p&gt;&#xA;&lt;p&gt;我是使用archinstall来安装arch的, 安装的时候选择了它默认的分区布局, 但是我希望系统和用户目录的文件分开备份. &lt;code&gt;就像timeshift要求的那样&lt;/code&gt;.&lt;/p&gt;&#xA;&lt;p&gt;于是, 我开始了google之旅, 根据在arch论坛上一个帖子下面的评论:&lt;/p&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;创建&lt;code&gt;@&lt;/code&gt;和&lt;code&gt;@home&lt;/code&gt;子卷&#xA;将&lt;code&gt;/&lt;/code&gt;和&lt;code&gt;/home/&lt;/code&gt;分别快照到对应子卷&#xA;更改&lt;code&gt;/etc/fstab&lt;/code&gt;, 把&lt;code&gt;/&lt;/code&gt;和&lt;code&gt;/home&lt;/code&gt;挂载到对应子卷上面&#xA;重启&#xA;把物理磁盘挂载出来并且进去把旧的root目录&lt;code&gt;/&lt;/code&gt;删掉&lt;/p&gt;&#xA;&lt;/blockquote&gt;&#xA;&lt;p&gt;目前为止, 一切都还顺利, 直到我&lt;code&gt;pacman -Syu&lt;/code&gt;了一波, 把内核更新了一下(&lt;/p&gt;&#xA;&lt;h3 id=&#34;问题&#34;&gt;问题&lt;/h3&gt;&#xA;&lt;p&gt;更新完内核重启之后, 自动进入了busybox, 把我吓了一跳, 连忙端起手机就开始google.&lt;/p&gt;&#xA;&lt;p&gt;在排查了一会之后, 原来是因为我把root &lt;code&gt;/&lt;/code&gt;移动到了子卷&lt;code&gt;@&lt;/code&gt;, 而内核文件自然也在&lt;code&gt;@&lt;/code&gt;里面, 但是引导还是认为内核文件在&lt;code&gt;/&lt;/code&gt;,&#xA;所以找不到内核, 而在更新内核的时候我也没仔细看重建引导文件时的输出, 导致了这次的问题.&lt;/p&gt;&#xA;&lt;h3 id=&#34;解决&#34;&gt;解决&lt;/h3&gt;&#xA;&lt;p&gt;那么解决方法就是, 启动arch的安装盘, 把linux所在的硬盘的&lt;code&gt;@&lt;/code&gt;挂载出来, 然后把引导分区挂载到&lt;code&gt;/@/boot&lt;/code&gt;, 修改&lt;code&gt;/etc/kernel/cmdline&lt;/code&gt;,&#xA;在启动选项加上&lt;code&gt;rootflags=subvol=/@&lt;/code&gt;, 告诉引导根目录在子卷&lt;code&gt;@&lt;/code&gt;, 然后&lt;code&gt;mkinitcpio -p linux&lt;/code&gt;重建引导文件到&lt;code&gt;/boot&lt;/code&gt;就好了.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>开始使用Linux桌面</title>
+      <link>https://example.org/posts/switch-to-linux/</link>
+      <pubDate>Thu, 21 Nov 2024 18:46:31 +0800</pubDate>
+      <guid>https://example.org/posts/switch-to-linux/</guid>
+      <description>&lt;p&gt;&lt;img src=&#34;https://example.org/342834244b15aab7e34a4c3a0cb60d9e.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;&#xA;&lt;p&gt;首先,得先找个硬盘装linux, 我在之前坏掉的轻薄本上拆下来一根512G的金士顿的nvme, 然后用m.2 to pcie卡. 所幸之前换pc的时候考虑到了以后拓展, 买了张二手x470,&#xA;有足足3个x16, 1个x1插槽(当然不全是满速, 2,3槽好像只是x8速度).&lt;/p&gt;&#xA;&lt;h3 id=&#34;archlinux&#34;&gt;Archlinux&lt;/h3&gt;&#xA;&lt;p&gt;发行版的选择上, 我倾向于用上最新的东西, 于是选择了archlinux, 不过是第一次装arch, 免不得折腾.&lt;/p&gt;&#xA;&lt;p&gt;掏出了古董8g usb2 u盘, 写入, 重启. 由于一开始不知道使用archlinuxcn仓库, 傻乎乎的在tty里跟gfw拉扯, 那天我直接把arch清华源的地址背了下来(哭&lt;/p&gt;&#xA;&lt;h3 id=&#34;桌面环境&#34;&gt;桌面环境&lt;/h3&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;1天后&lt;/p&gt;&#xA;&lt;/blockquote&gt;&#xA;&lt;p&gt;作为一个萌新, 我当然是选择一套现成的de来用. 一开始试了试hyprland+某套dotfiles, 但是实在是用不惯平铺布局, 平铺布局大概适合喜欢用双手操作键盘的人,&#xA;我的习惯是不敲代码的时候右手长期控制鼠标, 左手放wasd位置, 这意味着我对只能按到键盘1/3的键, 而平铺布局我的感觉是非常非常依赖快捷键的.&#xA;而且我习惯快速alt+tab切窗口, 已经完全是堆叠布局的形状了(x&lt;/p&gt;&#xA;&lt;h3 id=&#34;gnome--kde&#34;&gt;Gnome &amp;amp; KDE&lt;/h3&gt;&#xA;&lt;p&gt;ok, 那么我反手就是一个&lt;code&gt;paru -S gnome&lt;/code&gt;. 字体配置就不多说了,linux的中文字体渲染都发虚.&lt;/p&gt;&#xA;&lt;p&gt;但是在linuxqq上我遇到了输入法问题, 那就是因为gnome wayland不支持text-input-v1, 导致在chromium里没法使用输入法, 而chromium其实是支持text-input-v3的,&#xA;但是(又!), 由于不知道什么神奇原因, 同样的参数我到第二天再开机, 突然又用不了输入法了, 忍无可忍, 只好换kde了. (Kwin和hyprland都支持text-input-v3)&lt;/p&gt;&#xA;&lt;p&gt;&lt;code&gt;paru -Rcs gnome&lt;/code&gt;!&lt;/p&gt;&#xA;&lt;p&gt;在使用体验上, 我认为kde要比gnome更舒服点, 甚至支持hdr, 但是我把显卡驱动从beta的xe驱动切换到老的i915驱动之后, hdr功能就消失了.&#xA;但是6.12内核intel好像是把xe驱动设置成默认了, 也不急这一个星期, 我就老老实实等arch更新吧.&lt;/p&gt;&#xA;&lt;p&gt;kde还有一个&amp;quot;黑科技&amp;quot;, 就是有默认的小部件来设置屏幕亮度(外接屏幕), 而且并不是通过硬件驱动来设置屏幕亮度, 因为我屏幕的亮度设置没有变.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

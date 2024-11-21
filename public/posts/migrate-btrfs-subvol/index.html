@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html><head lang="en">
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>将btrfs迁移到子卷把引导弄坏这件事 - soeur&#39;s blog</title><link rel="icon" type="image/png" href=/favicon.svg /><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="..." />
+	<meta property="og:image" content=""/>
+	<meta property="og:url" content="https://example.org/posts/migrate-btrfs-subvol/">
+  <meta property="og:site_name" content="soeur&#39;s blog">
+  <meta property="og:title" content="将btrfs迁移到子卷把引导弄坏这件事">
+  <meta property="og:description" content="...">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-11-21T18:46:31+08:00">
+    <meta property="article:modified_time" content="2024-11-21T18:46:31+08:00">
+    <meta property="article:tag" content="Linux">
+    <meta property="article:tag" content="Btrfs">
+    <meta property="article:tag" content="恢复">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="将btrfs迁移到子卷把引导弄坏这件事">
+  <meta name="twitter:description" content="...">
+<script src="https://example.org/js/feather.min.js"></script>
+	
+	
+        <link href="https://example.org/css/fonts.2c2227b81b1970a03e760aa2e6121cd01f87c88586803cbb282aa224720a765f.css" rel="stylesheet">
+	
+
+	
+	<link rel="stylesheet" type="text/css" media="screen" href="https://example.org/css/main.5cebd7d4fb2b97856af8d32a6def16164fcf7d844e98e236fcb3559655020373.css" />
+
+	
+	
+
+	
+	
+
+	
+</head>
+<body>
+        <div class="content"><header>
+	<div class="main">
+		<a href="https://example.org/">soeur&#39;s blog</a>
+	</div>
+	<nav>
+		
+		<a href="/">Home</a>
+		
+		<a href="/tags">Tags</a>
+		
+		
+	</nav>
+</header>
+
+<main>
+	<article>
+		<div class="title">
+			<h1 class="title">将btrfs迁移到子卷把引导弄坏这件事</h1>
+			<div class="meta">Posted on Nov 21, 2024</div>
+		</div>
+		
+
+		
+
+		<section class="body">
+			<p>折腾完了桌面坏境, 开始设置备份, 一开始想用timeshift, 但是不知道为啥它的gui打开就闪退, 只好使用snapper了.</p>
+<p>我是使用archinstall来安装arch的, 安装的时候选择了它默认的分区布局, 但是我希望系统和用户目录的文件分开备份. <code>就像timeshift要求的那样</code>.</p>
+<p>于是, 我开始了google之旅, 根据在arch论坛上一个帖子下面的评论:</p>
+<blockquote>
+<p>创建<code>@</code>和<code>@home</code>子卷
+将<code>/</code>和<code>/home/</code>分别快照到对应子卷
+更改<code>/etc/fstab</code>, 把<code>/</code>和<code>/home</code>挂载到对应子卷上面
+重启
+把物理磁盘挂载出来并且进去把旧的root目录<code>/</code>删掉</p>
+</blockquote>
+<p>目前为止, 一切都还顺利, 直到我<code>pacman -Syu</code>了一波, 把内核更新了一下(</p>
+<h3 id="问题">问题</h3>
+<p>更新完内核重启之后, 自动进入了busybox, 把我吓了一跳, 连忙端起手机就开始google.</p>
+<p>在排查了一会之后, 原来是因为我把root <code>/</code>移动到了子卷<code>@</code>, 而内核文件自然也在<code>@</code>里面, 但是引导还是认为内核文件在<code>/</code>,
+所以找不到内核, 而在更新内核的时候我也没仔细看重建引导文件时的输出, 导致了这次的问题.</p>
+<h3 id="解决">解决</h3>
+<p>那么解决方法就是, 启动arch的安装盘, 把linux所在的硬盘的<code>@</code>挂载出来, 然后把引导分区挂载到<code>/@/boot</code>, 修改<code>/etc/kernel/cmdline</code>,
+在启动选项加上<code>rootflags=subvol=/@</code>, 告诉引导根目录在子卷<code>@</code>, 然后<code>mkinitcpio -p linux</code>重建引导文件到<code>/boot</code>就好了.</p>
+
+		</section>
+
+		<div class="post-tags">
+			
+			
+			<nav class="nav tags">
+				<ul class="tags">
+					
+					<li><a href="/tags/linux">linux</a></li>
+					
+					<li><a href="/tags/btrfs">btrfs</a></li>
+					
+					<li><a href="/tags/%E6%81%A2%E5%A4%8D">恢复</a></li>
+					
+				</ul>
+			</nav>
+			
+			
+		</div>
+		</article>
+</main>
+<footer>
+  <div style="display:flex"><a class="soc" href="https://github.com/juzi5201314" rel="me" title="GitHub"><i data-feather="github"></i></a>
+    <a class="border"></a></div>
+  <div class="footer-info">
+    2024  <a
+      href="https://github.com/athul/archie">Archie Theme</a> | Built with <a href="https://gohugo.io">Hugo</a>
+  </div>
+</footer>
+
+
+<script>
+  feather.replace()
+</script></div>
+    </body>
+</html>

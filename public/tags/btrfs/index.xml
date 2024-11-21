@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Btrfs on soeur&#39;s blog</title>
+    <link>https://example.org/tags/btrfs/</link>
+    <description>Recent content in Btrfs on soeur&#39;s blog</description>
+    <generator>Hugo</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Thu, 21 Nov 2024 18:46:31 +0800</lastBuildDate>
+    <atom:link href="https://example.org/tags/btrfs/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>将btrfs迁移到子卷把引导弄坏这件事</title>
+      <link>https://example.org/posts/migrate-btrfs-subvol/</link>
+      <pubDate>Thu, 21 Nov 2024 18:46:31 +0800</pubDate>
+      <guid>https://example.org/posts/migrate-btrfs-subvol/</guid>
+      <description>&lt;p&gt;折腾完了桌面坏境, 开始设置备份, 一开始想用timeshift, 但是不知道为啥它的gui打开就闪退, 只好使用snapper了.&lt;/p&gt;&#xA;&lt;p&gt;我是使用archinstall来安装arch的, 安装的时候选择了它默认的分区布局, 但是我希望系统和用户目录的文件分开备份. &lt;code&gt;就像timeshift要求的那样&lt;/code&gt;.&lt;/p&gt;&#xA;&lt;p&gt;于是, 我开始了google之旅, 根据在arch论坛上一个帖子下面的评论:&lt;/p&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;创建&lt;code&gt;@&lt;/code&gt;和&lt;code&gt;@home&lt;/code&gt;子卷&#xA;将&lt;code&gt;/&lt;/code&gt;和&lt;code&gt;/home/&lt;/code&gt;分别快照到对应子卷&#xA;更改&lt;code&gt;/etc/fstab&lt;/code&gt;, 把&lt;code&gt;/&lt;/code&gt;和&lt;code&gt;/home&lt;/code&gt;挂载到对应子卷上面&#xA;重启&#xA;把物理磁盘挂载出来并且进去把旧的root目录&lt;code&gt;/&lt;/code&gt;删掉&lt;/p&gt;&#xA;&lt;/blockquote&gt;&#xA;&lt;p&gt;目前为止, 一切都还顺利, 直到我&lt;code&gt;pacman -Syu&lt;/code&gt;了一波, 把内核更新了一下(&lt;/p&gt;&#xA;&lt;h3 id=&#34;问题&#34;&gt;问题&lt;/h3&gt;&#xA;&lt;p&gt;更新完内核重启之后, 自动进入了busybox, 把我吓了一跳, 连忙端起手机就开始google.&lt;/p&gt;&#xA;&lt;p&gt;在排查了一会之后, 原来是因为我把root &lt;code&gt;/&lt;/code&gt;移动到了子卷&lt;code&gt;@&lt;/code&gt;, 而内核文件自然也在&lt;code&gt;@&lt;/code&gt;里面, 但是引导还是认为内核文件在&lt;code&gt;/&lt;/code&gt;,&#xA;所以找不到内核, 而在更新内核的时候我也没仔细看重建引导文件时的输出, 导致了这次的问题.&lt;/p&gt;&#xA;&lt;h3 id=&#34;解决&#34;&gt;解决&lt;/h3&gt;&#xA;&lt;p&gt;那么解决方法就是, 启动arch的安装盘, 把linux所在的硬盘的&lt;code&gt;@&lt;/code&gt;挂载出来, 然后把引导分区挂载到&lt;code&gt;/@/boot&lt;/code&gt;, 修改&lt;code&gt;/etc/kernel/cmdline&lt;/code&gt;,&#xA;在启动选项加上&lt;code&gt;rootflags=subvol=/@&lt;/code&gt;, 告诉引导根目录在子卷&lt;code&gt;@&lt;/code&gt;, 然后&lt;code&gt;mkinitcpio -p linux&lt;/code&gt;重建引导文件到&lt;code&gt;/boot&lt;/code&gt;就好了.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

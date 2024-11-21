@@ -1,0 +1,25 @@
+baseURL = 'https://example.org/'
+languageCode = 'zh-cn'
+title = "soeur's blog"
+theme = "archie"
+
+[pagination]
+pagerSize = 7
+
+[params]
+favicon = "/favicon.svg"
+
+[[params.social]]
+name = "GitHub"
+icon = "github"
+url = "https://github.com/juzi5201314"
+
+[[menu.main]]
+name = "Home"
+url = "/"
+weight = 1
+
+[[menu.main]]
+name = "Tags"
+url = "/tags"
+weight = 2
