@@ -5,7 +5,7 @@ description = "最近在windows下写代码的时候遇到了在win11 derive(ReF
 tags = ["linux", "开发"]
 +++
 
-![img](/342834244b15aab7e34a4c3a0cb60d9e.png)
+![img](/342834244b15aab7e34a4c3a0cb60d9e.webp)
 
 首先,得先找个硬盘装linux, 我在之前坏掉的轻薄本上拆下来一根512G的金士顿的nvme, 然后用m.2 to pcie卡. 所幸之前换pc的时候考虑到了以后拓展, 买了张二手x470,
 有足足3个x16, 1个x1插槽(当然不全是满速, 2,3槽好像只是x8速度).
@@ -63,5 +63,5 @@ kde还有一个"黑科技", 就是有默认的小部件来设置屏幕亮度(外
 
 目前cosmic包含一些小组件, 托盘, 通知守护进程, 终端仿真器, 文件管理器, 文本编辑器, 和一个基于flathub的应用商店.
 
-![img](/34762b3c41ef3fd332383fe5462fc9e5.png)
-![img](/bade0469e5a5b58764eefacd1b194ebf.png)
+![img](/34762b3c41ef3fd332383fe5462fc9e5.webp)
+![img](/bade0469e5a5b58764eefacd1b194ebf.webp)

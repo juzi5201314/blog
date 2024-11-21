@@ -28,3 +28,6 @@ tags = ["linux", "btrfs", "恢复"]
 ### 解决
 那么解决方法就是, 启动arch的安装盘, 把linux所在的硬盘的`@`挂载出来, 然后把引导分区挂载到`/@/boot`, 修改`/etc/kernel/cmdline`,
 在启动选项加上`rootflags=subvol=/@`, 告诉引导根目录在子卷`@`, 然后`mkinitcpio -p linux`重建引导文件到`/boot`就好了.
+
+## Btrfs
+btrfs挺好用的, cow+快照能用较小的代价备份文件, 防止把系统玩炸. 透明zstd压缩也能缓解一下买不起硬盘的问题(x
